@@ -1,0 +1,73 @@
+﻿@model IEnumerable<highschool.Models.Discipline>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table id="disciplines" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Discipline</th>
+            <th>Professor</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            var table = $("#disciplines").DataTable({
+                ajax: {
+                    url: "/api/discipline",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "DisciplineName",
+                        render: function (data, type, discipline) {
+                            return "<a href='/discipline/edit/" + discipline.DisciplineId + "'>" + discipline.DisciplineName + "</a>";
+                        }
+                    },
+                    {
+                        data: "ProfessorName",
+                        render: function (data, type, discipline) {
+                            return "<a href='/discipline/edit/" + discipline.DisciplineId + "'>" + discipline.ProfessorName + "</a>";
+                        }
+                        
+                    },
+                    {
+                        data: "id",
+                        render: function (data) {
+                            return "<button class='btn-link js-delete' data-discipline-id=" + data + ">Delete</button>";
+                        }
+                    }
+                ]
+            });
+
+
+            $("#movies").on("click", ".js-delete", function () {
+                var button = $(this);
+
+                bootbox.confirm("Are you sure you want to delete this movie?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/movies/" + button.attr("data-discipline-id"),
+                            method: "DELETE",
+                            success: function () {
+                                table.row(button.parents("tr")).remove().draw();
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

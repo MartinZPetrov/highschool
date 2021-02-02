@@ -1,4 +1,5 @@
-﻿using System;
+﻿using highschool.DAL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,8 +11,8 @@ namespace highschool.Controllers
     {
         public ActionResult Index()
         {
+            //DisciplineDAL.GetDisciplines();
             ViewBag.Title = "Home Page";
-
             return View();
         }
     }
